@@ -9,17 +9,34 @@ block content
       div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
         ul(class="nav navbar-nav")
           li(class="active")
-            a(href="#") Home
+            a(href="/") Home
           li
             a(href="#") Browse
 
         ul(class="nav navbar-nav navbar-right")
-          li
-            a(href="/login") Sign In
+          if signedInUser
+            li
+              a(href="#" class="btn-primary") !{signedInUser}
+            li
+              a(href="/logout") Logout
+          else
+            li
+              a(href="/login") Sign In
+
+  script(type='text/javascript').
+    function hideMessage() {
+      document.getElementById("message").style.display = 'none';
+    }
 
   br
   br
   br
+
+  div(style="margin-left:20%; margin-right:20%;")
+    if message
+      div(class="alert alert-dismissible alert-success" id="message")
+        button(type="button" class="close" onclick="hideMessage();") &times;
+        p(align="center") !{message}
 
   h1(align="center") !{title}
   p(align="center") Introduction to the website.

@@ -14,8 +14,14 @@ block content
                         a(href="#") Browse
 
                 ul(class="nav navbar-nav navbar-right")
-                    li
-                        a(href="/login") Sign In
+                    if signedInUser
+                        li
+                            a(href="#" class="btn-primary") !{signedInUser}
+                        li
+                            a(href="/logout") Logout
+                    else
+                        li
+                            a(href="/login") Sign In
 
     br
     br

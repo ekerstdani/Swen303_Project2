@@ -14,23 +14,39 @@ block content
                         a(href="#") Browse
 
                 ul(class="nav navbar-nav navbar-right")
-                    li(class="active")
-                        a(href="#") Sign In
+                    if signedInUser
+                        li
+                            a(href="#" class="btn-primary") !{signedInUser}
+                        li
+                            a(href="/logout") Logout
+                    else
+                        li
+                            a(href="/login") Sign In
+
+    script(type='text/javascript').
+        function hideMessage() {
+            document.getElementById("message").style.display = 'none';
+        }
 
     br
     br
     br
 
     div(class="well" style="margin-left:20%; margin-right:20%;")
+        if message
+            div(class="alert alert-dismissible alert-danger" id="message")
+                button(type="button" class="close" onclick="hideMessage();") &times;
+                p(align="center") !{message}
+
         div(class="row search")
             div(class="col-sm-6 col-sm-offset-3")
-                form(role="form")
+                form(role="form" action="/doLogin")
                     div(class="form-group")
                         label(for="username" class="col-lg-2 control-label") Username
-                        input(type="text" class="form-control input-sm" placeholder="Username" id="username")
+                        input(type="text" class="form-control input-sm" placeholder="Username" id="username" name="username")
                     div(class="form-group")
                         label(for="password" class="col-lg-2 control-label") Password
-                        input(type="text" class="form-control input-sm" placeholder="Password" id="password")
+                        input(type="password" class="form-control input-sm" placeholder="Password" id="password" name="password")
                     div(class="form-group" align="center")
                             button(type="reset" class="btn btn-default") Cancel
                             button(type="submit" class="btn btn-primary") Sign In

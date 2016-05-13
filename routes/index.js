@@ -22,6 +22,27 @@ router.get('/', function(req, res) {
   res.render('index', { title: websiteName, signedInUser: signedInUser, message: "" });
 });
 
+router.get('/browse', function(req, res) {
+  pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+
+    client.query("SELECT * FROM Stock;", function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+
+      res.render('browse', { title: websiteName, signedInUser: signedInUser, list: result.rows });
+    });
+  });
+});
+
 router.get('/product', function(req, res) {
   var exampleProduct = {};
   exampleProduct.title = "Test Product";
@@ -49,7 +70,7 @@ router.get('/doLogin', function(req, res) {
     client.query("SELECT * FROM Users;", function (error, result) {
       done();
       if (error) {
-        console.error('Failed to execute query');
+        console.error('Failed to execute query.');
         console.error(error);
         return;
       }
@@ -73,6 +94,10 @@ router.get('/doLogin', function(req, res) {
       res.render('login', { title: websiteName, message: message });
     });
   });
+});
+
+router.get('/addItem', function(req, res) {
+  res.render('addItem', { title: websiteName });
 });
 
 router.get('/logout', function(req, res) {

@@ -10,7 +10,7 @@ block content
                 ul(class="nav navbar-nav")
                     li
                         a(href="/") Home
-                    li
+                    li(class="active")
                         a(href="/browse") Browse
 
                 ul(class="nav navbar-nav navbar-right")
@@ -27,16 +27,16 @@ block content
     br
     br
 
-    h1(align="center") !{product.title}
+    div(style="margin-left:30%; margin-right:30%;")
+        table(class="table table-striped table-hover")
+            thead
+                tr
+                    th(width="70%") Name
+                    th(width="30%") Price
+                tr
 
-    br
-
-    div(class="well" style="margin-left:20%; margin-right:20%;")
-        div(class="pull-right")
-            p (product image)
-
-        h2(class="text-info") !{product.price}
-            &nbsp;
-            button(class="btn btn-primary btn-xs") Buy Now
-
-        p !{product.description}
+            tbody
+                each val in list
+                    tr
+                        th !{val.name}
+                        th $!{val.price}

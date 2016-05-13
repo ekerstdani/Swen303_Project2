@@ -23,30 +23,23 @@ block content
                         li
                             a(href="/login") Sign In
 
-    script(type='text/javascript').
-        function hideMessage() {
-            document.getElementById("message").style.display = 'none';
-        }
-
     br
     br
     br
 
     div(class="well" style="margin-left:20%; margin-right:20%;")
-        if message
-            div(class="alert alert-dismissible alert-danger" id="message")
-                button(type="button" class="close" onclick="hideMessage();") &times;
-                p(align="center") !{message}
-
         div(class="row search")
             div(class="col-sm-6 col-sm-offset-3")
-                form(role="form" action="/doLogin")
+                form(role="form" action="/doAddItem")
                     div(class="form-group")
-                        label(for="username" class="col-lg-2 control-label") Username
-                        input(type="text" class="form-control input-sm" placeholder="Username" id="username" name="username")
+                        label(for="name" class="col-lg-2 control-label") Name
+                        input(type="text" class="form-control input-sm" placeholder="Name" id="name" name="name")
                     div(class="form-group")
-                        label(for="password" class="col-lg-2 control-label") Password
-                        input(type="password" class="form-control input-sm" placeholder="Password" id="password" name="password")
+                        label(for="price" class="col-lg-2 control-label") Price
+                        input(type="text" class="form-control input-sm" placeholder="Price" id="price" name="price")
+                    div(class="form-group")
+                        label(for="description" class="col-lg-2 control-label") Description
+                        textarea(class="form-control" rows="3" placeholder="Description" id="description" name="description")
                     div(class="form-group" align="center")
-                            button(type="reset" class="btn btn-default") Cancel
-                            button(type="submit" class="btn btn-primary") Sign In
+                        button(type="reset" class="btn btn-default") Cancel
+                        button(type="submit" class="btn btn-primary") Submit

@@ -2,8 +2,10 @@
 
 For psql:
 
-Database is named "swen303"
+Database is named "swen303". For username/pw use postgres/admin
 
 Tables:
 
   Users: Username,Realname,Password
+
+  Stock: Name,Description,Price

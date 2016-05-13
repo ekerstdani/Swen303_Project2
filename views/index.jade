@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  nav(class="navbar navbar-default")
+  nav(class="navbar navbar-default navbar-fixed-top")
     div(class="container-fluid")
       div(class="navbar-header")
         a(class="navbar-brand" href="#") !{title}
@@ -15,7 +15,11 @@ block content
 
         ul(class="nav navbar-nav navbar-right")
           li
-            a(href="#") Sign In
+            a(href="/login") Sign In
+
+  br
+  br
+  br
 
   h1(align="center") !{title}
   p(align="center") Introduction to the website.
@@ -26,7 +30,7 @@ block content
     div(class="col-sm-6 col-sm-offset-3")
       form(role="form")
         div(class="input-group")
-          input(type="text" class="form-control input-sm")
+          input(type="text" class="form-control input-sm" placeholder="Search products...")
           span(class="input-group-btn")
-            button(class="btn btn-default btn-sm" type="submit")
-              a(href="#") SEARCH
+            button(class="btn btn-primary btn-sm" type="submit")
+              span(class="glyphicon glyphicon-search" aria-hidden="true")

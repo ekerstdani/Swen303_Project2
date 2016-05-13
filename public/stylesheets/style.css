@@ -1,8 +1,8 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+p {
+  font-family: Calibri, serif;
 }
 
-a {
-  color: #00B7FF;
+nav.navbar {
+  margin-left: 20%;
+  margin-right: 20%;
 }

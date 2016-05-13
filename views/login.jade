@@ -1,0 +1,36 @@
+extends layout
+
+block content
+    nav(class="navbar navbar-default navbar-fixed-top")
+        div(class="container-fluid")
+            div(class="navbar-header")
+                a(class="navbar-brand" href="#") !{title}
+
+            div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+                ul(class="nav navbar-nav")
+                    li
+                        a(href="/") Home
+                    li
+                        a(href="#") Browse
+
+                ul(class="nav navbar-nav navbar-right")
+                    li(class="active")
+                        a(href="#") Sign In
+
+    br
+    br
+    br
+
+    div(class="well" style="margin-left:20%; margin-right:20%;")
+        div(class="row search")
+            div(class="col-sm-6 col-sm-offset-3")
+                form(role="form")
+                    div(class="form-group")
+                        label(for="username" class="col-lg-2 control-label") Username
+                        input(type="text" class="form-control input-sm" placeholder="Username" id="username")
+                    div(class="form-group")
+                        label(for="password" class="col-lg-2 control-label") Password
+                        input(type="text" class="form-control input-sm" placeholder="Password" id="password")
+                    div(class="form-group" align="center")
+                            button(type="reset" class="btn btn-default") Cancel
+                            button(type="submit" class="btn btn-primary") Sign In

@@ -1,0 +1,36 @@
+extends layout
+
+block content
+    nav(class="navbar navbar-default navbar-fixed-top")
+        div(class="container-fluid")
+            div(class="navbar-header")
+                a(class="navbar-brand" href="#") !{title}
+
+            div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+                ul(class="nav navbar-nav")
+                    li
+                        a(href="/") Home
+                    li
+                        a(href="#") Browse
+
+                ul(class="nav navbar-nav navbar-right")
+                    li
+                        a(href="/login") Sign In
+
+    br
+    br
+    br
+
+    h1(align="center") !{product.title}
+
+    br
+
+    div(class="well" style="margin-left:20%; margin-right:20%;")
+        div(class="pull-right")
+            p (product image)
+
+        h2(class="text-info") !{product.price}
+            &nbsp;
+            button(class="btn btn-primary btn-xs") Buy Now
+
+        p !{product.description}

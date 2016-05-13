@@ -1,5 +1,32 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  nav(class="navbar navbar-default")
+    div(class="container-fluid")
+      div(class="navbar-header")
+        a(class="navbar-brand" href="#") !{title}
+
+      div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+        ul(class="nav navbar-nav")
+          li(class="active")
+            a(href="#") Home
+          li
+            a(href="#") Browse
+
+        ul(class="nav navbar-nav navbar-right")
+          li
+            a(href="#") Sign In
+
+  h1(align="center") !{title}
+  p(align="center") Introduction to the website.
+
+  br
+
+  div(class="row search")
+    div(class="col-sm-6 col-sm-offset-3")
+      form(role="form")
+        div(class="input-group")
+          input(type="text" class="form-control input-sm")
+          span(class="input-group-btn")
+            button(class="btn btn-default btn-sm" type="submit")
+              a(href="#") SEARCH

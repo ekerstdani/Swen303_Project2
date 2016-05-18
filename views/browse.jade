@@ -41,12 +41,15 @@ block content
         table(class="table table-striped table-hover")
             thead
                 tr
-                    th(width="70%") Name
-                    th(width="30%") Price
+                    th(width="30%") Name
+                    th(width="50%") Description
+                    th(width="20%") Price
                 tr
 
             tbody
                 each val in list
                     tr
-                        th !{val.name}
+                        th
+                         a(href="/product?id=" + val.sid) !{val.label}
+                        th !{val.description}
                         th $!{val.price}

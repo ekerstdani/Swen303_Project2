@@ -32,7 +32,16 @@ router.get('/browse', function(req, res) {
       return;
     }
 
-    client.query("SELECT * FROM Stock;", function (error, result) {
+    var query = "SELECT * FROM Stock ";
+
+    if(req.query.orderBy == "price")
+      query += "ORDER BY price;";
+    else if(req.query.orderBy == "name")
+      query += "ORDER BY label;";
+    else
+      query += ";";
+
+    client.query(query, function (error, result) {
       done();
       if (error) {
         console.error('Failed to execute query.');

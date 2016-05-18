@@ -41,9 +41,11 @@ block content
         table(class="table table-striped table-hover")
             thead
                 tr
-                    th(width="30%") Name
+                    th(width="30%")
+                        a(href="/browse?orderBy=name") Name
                     th(width="50%") Description
-                    th(width="20%") Price
+                    th(width="20%")
+                        a(href="/browse?orderBy=price") Price
                 tr
 
             tbody

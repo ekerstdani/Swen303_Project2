@@ -106,6 +106,29 @@ router.get('/addItem', function(req, res) {
   res.render('addItem', { title: websiteName, signedInUser: signedInUser });
 });
 
+router.get('/doAddItem', function(req, res) {
+  	pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+    
+    var query = "INSERT INTO Stock (Label, Price, Quantity) VALUES ('" + req.query.name + "', " + req.query.price + ", " + req.query.quantity + ");";
+
+    client.query(query, function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+
+      res.render('addItem', { title: websiteName, signedInUser: signedInUser });
+    });
+  });
+});
+
 router.get('/logout', function(req, res) {
   signedInUser = false;
   res.render('index', { title: websiteName, signedInUser: signedInUser, message: "Signed out successfully." });

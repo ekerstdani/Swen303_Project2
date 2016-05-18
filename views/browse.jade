@@ -50,6 +50,6 @@ block content
                 each val in list
                     tr
                         th
-                         a(href="/product?id=" + val.sid) !{val.label}
+                            a(href="/product?sid=" + val.sid) !{val.label}
                         th !{val.description}
                         th $!{val.price}

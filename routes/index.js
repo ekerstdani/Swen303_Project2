@@ -46,12 +46,26 @@ router.get('/browse', function(req, res) {
 });
 
 router.get('/product', function(req, res) {
-  var exampleProduct = {};
-  exampleProduct.title = "Test Product";
-  exampleProduct.price = "$13.37";
-  exampleProduct.description = "This is a test product. Dank af.";
+  pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+    
+    var query = "SELECT * FROM stock WHERE sid=" + req.query.sid + ";";
+    
+    client.query(query, function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
 
-  res.render('product', { title: websiteName, product: exampleProduct, signedInUser: signedInUser });
+      res.render('product', { title: websiteName, product: result.rows[0], signedInUser: signedInUser });
+    })
+  })
 });
 
 router.get('/login', function(req, res) {

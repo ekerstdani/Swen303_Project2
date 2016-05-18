@@ -21,7 +21,7 @@ var signedInUserUID = 0;
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index', { title: websiteName, signedInUser: signedInUser, message: "" });
+  res.render('index', { title: websiteName, signedInUser: signedInUser, message: "", id: signedInUserUID });
 });
 
 router.get('/browse', function(req, res) {
@@ -88,7 +88,7 @@ router.get('/doLogin', function(req, res) {
             signedInUserRealname = result.rows[i].realname;
             signedInUserUID = result.rows[i].uid;
             
-            res.render('index', { title: websiteName, message: message, signedInUser: signedInUser });
+            res.render('index', { title: websiteName, message: message, signedInUser: signedInUser, id: signedInUserUID });
           }
           else {
             message = "Incorrect password.";
@@ -102,7 +102,30 @@ router.get('/doLogin', function(req, res) {
 });
 
 router.get('/userPage', function(req, res) {
-  res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "" });
+  res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "", id: signedInUserUID });
+});
+
+router.get('/profile', function(req, res) {
+  pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+    
+    var query = "SELECT * FROM users WHERE uid=" + req.query.user + ";";
+    
+    client.query(query, function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+      
+      res.render('profile', { title: websiteName, user: result.rows[0], signedInUser: signedInUser });
+   });
+  });
 });
 
 router.get('/addItem', function(req, res) {

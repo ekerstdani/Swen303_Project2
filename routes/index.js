@@ -3,7 +3,7 @@ var router = express.Router();
 
 var pg = require('pg').native;
 
-var database = "postgres://lovejaco1:abc@depot:5432/swen303g8";
+var database = "postgres://depot:5432/swen303g8";
 pg.connect(database, function (err) {
   if (err) {
     console.error('Could not connect to the database.');
@@ -99,7 +99,7 @@ router.get('/doLogin', function(req, res) {
 });
 
 router.get('/userPage', function(req, res) {
-  res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname });
+  res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "" });
 });
 
 router.get('/addItem', function(req, res) {
@@ -109,6 +109,47 @@ router.get('/addItem', function(req, res) {
 router.get('/logout', function(req, res) {
   signedInUser = false;
   res.render('index', { title: websiteName, signedInUser: signedInUser, message: "Signed out successfully." });
+});
+
+router.get('/changePW', function(req, res) {
+  var password = req.query.pw;
+  
+  if (password != req.query.pwConfirm) {
+    res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Passwords did not match." });
+  }
+  else {
+  pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+
+    client.query("SELECT * FROM Users;", function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+
+      for (var i = 0; i < result.rows.length; i++) {
+        if (result.rows[i].username == signedInUser) {
+          client.query("UPDATE users SET password='" + password + "' WHERE username='" + signedInUser + "';", function (error, result) {
+            done();
+            if (error) {
+              console.error('Failed to execute query.');
+              console.error(error);
+              return;
+            }
+
+            res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Successfully changed password." });
+          });
+        }
+      }
+    });
+  });
+  }
 });
 
 module.exports = router;

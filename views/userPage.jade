@@ -1,0 +1,70 @@
+extends layout
+
+block content
+    nav(class="navbar navbar-default navbar-fixed-top")
+        div(class="container-fluid")
+            div(class="navbar-header")
+                a(class="navbar-brand" href="/") !{title}
+
+            div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+                ul(class="nav navbar-nav")
+                    li
+                        a(href="/") Home
+                    li
+                        a(href="/browse") Browse
+
+                ul(class="nav navbar-nav navbar-right")
+                    if signedInUser
+                        li
+                            a(href="/userPage" class="btn-primary") !{signedInUser}
+                        li
+                            a(href="/logout") Logout
+                    else
+                        li
+                            a(href="/login") Sign In
+
+    script(type='text/javascript').
+        function showChangePW() {
+            document.getElementById('changePW').style.display = 'block';
+            document.getElementById('changePWButton').className = "btn btn-info disabled";
+        }
+        
+        function hideMessage() {
+            document.getElementById("message").style.display = 'none';
+        }
+
+    br
+    br
+    br
+    
+    div(style="margin-left:20%; margin-right:20%;")
+      if message
+        if message == "Successfully changed password."
+          div(class="alert alert-dismissible alert-success" id="message")
+            button(type="button" class="close" onclick="hideMessage();") &times;
+            p(align="center") !{message}
+        else
+          div(class="alert alert-dismissible alert-danger" id="message")
+            button(type="button" class="close" onclick="hideMessage();") &times;
+            p(align="center") !{message}
+
+    div(style="margin-left:20%; margin-right:20%;")
+        center
+            if signedInUser
+                p Hello, !{realname}.
+            
+                a(class="btn btn-primary" href="/addItem" style="margin-right: 5px;") Add new item
+                a(class="btn btn-info" onclick="showChangePW()" id="changePWButton") Change password
+            else
+                p Please sign in first.
+                
+            br
+            br                
+                
+            div(id="changePW" class="well" style="display:none; height:130px;")
+                div(class="col-sm-6 col-sm-offset-3")
+                  form(role="form" action="/changePW")
+                    div(class="input-group")
+                      input(type="password" class="form-control input-sm" name="pw" placeholder="New password")
+                      input(type="password" class="form-control input-sm" name="pwConfirm" placeholder="Confirm password")
+                      button(class="btn btn-primary btn-sm" type="submit") Change password

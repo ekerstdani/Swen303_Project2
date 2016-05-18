@@ -17,6 +17,7 @@ pg.connect(database, function (err) {
 var websiteName = 'Website Name';
 var signedInUser = '';
 var signedInUserRealname = '';
+var signedInUserUID = 0;
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -85,6 +86,8 @@ router.get('/doLogin', function(req, res) {
 
             signedInUser = username;
             signedInUserRealname = result.rows[i].realname;
+            signedInUserUID = result.rows[i].uid;
+            
             res.render('index', { title: websiteName, message: message, signedInUser: signedInUser });
           }
           else {
@@ -114,7 +117,7 @@ router.get('/doAddItem', function(req, res) {
       return;
     }
     
-    var query = "INSERT INTO Stock (Label, Price, Quantity) VALUES ('" + req.query.name + "', " + req.query.price + ", " + req.query.quantity + ");";
+    var query = "INSERT INTO Stock (uid, Label, Price, Quantity, Description) VALUES (" + signedInUserUID + ", '" + req.query.name + "', " + req.query.price + ", " + req.query.quantity + ", '" + req.query.description + "');";
 
     client.query(query, function (error, result) {
       done();
@@ -173,6 +176,42 @@ router.get('/changePW', function(req, res) {
     });
   });
   }
+});
+
+router.get('/changeName', function(req, res) {
+  var name = req.query.name;
+  
+  pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+
+    client.query("SELECT * FROM Users;", function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+
+      for (var i = 0; i < result.rows.length; i++) {
+        if (result.rows[i].username == signedInUser) {
+          client.query("UPDATE users SET realname='" + name + "' WHERE username='" + signedInUser + "';", function (error, result) {
+            done();
+            if (error) {
+              console.error('Failed to execute query.');
+              console.error(error);
+              return;
+            }
+				signedInUserRealname = name;
+            res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Successfully changed name." });
+          });
+        }
+      }
+    });
+  });
 });
 
 module.exports = router;

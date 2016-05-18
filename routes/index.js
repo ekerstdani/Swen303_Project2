@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-var pg = require('pg');
+var pg = require('pg').native;
 
-var database = "postgres://postgres:admin@localhost:5432/swen303";
+var database = "postgres://lovejaco1:abc@depot:5432/swen303g8";
 pg.connect(database, function (err) {
   if (err) {
     console.error('Could not connect to the database.');
@@ -16,6 +16,7 @@ pg.connect(database, function (err) {
 
 var websiteName = 'Website Name';
 var signedInUser = '';
+var signedInUserRealname = '';
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -83,6 +84,7 @@ router.get('/doLogin', function(req, res) {
             message = "Signed in successfully.";
 
             signedInUser = username;
+            signedInUserRealname = result.rows[i].realname;
             res.render('index', { title: websiteName, message: message, signedInUser: signedInUser });
           }
           else {
@@ -96,8 +98,12 @@ router.get('/doLogin', function(req, res) {
   });
 });
 
+router.get('/userPage', function(req, res) {
+  res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname });
+});
+
 router.get('/addItem', function(req, res) {
-  res.render('addItem', { title: websiteName });
+  res.render('addItem', { title: websiteName, signedInUser: signedInUser });
 });
 
 router.get('/logout', function(req, res) {

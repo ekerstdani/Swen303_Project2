@@ -16,7 +16,7 @@ block content
                 ul(class="nav navbar-nav navbar-right")
                     if signedInUser
                         li
-                            a(href="#" class="btn-primary") !{signedInUser}
+                            a(href="/userPage" class="btn-primary") !{signedInUser}
                         li
                             a(href="/logout") Logout
                     else
@@ -28,18 +28,22 @@ block content
     br
 
     div(class="well" style="margin-left:20%; margin-right:20%;")
-        div(class="row search")
-            div(class="col-sm-6 col-sm-offset-3")
-                form(role="form" action="/doAddItem")
-                    div(class="form-group")
-                        label(for="name" class="col-lg-2 control-label") Name
-                        input(type="text" class="form-control input-sm" placeholder="Name" id="name" name="name")
-                    div(class="form-group")
-                        label(for="price" class="col-lg-2 control-label") Price
-                        input(type="text" class="form-control input-sm" placeholder="Price" id="price" name="price")
-                    div(class="form-group")
-                        label(for="description" class="col-lg-2 control-label") Description
-                        textarea(class="form-control" rows="3" placeholder="Description" id="description" name="description")
-                    div(class="form-group" align="center")
-                        button(type="reset" class="btn btn-default") Cancel
-                        button(type="submit" class="btn btn-primary") Submit
+        if signedInUser
+            div(class="row search")
+                div(class="col-sm-6 col-sm-offset-2")
+                    form(role="form" action="/doAddItem")
+                        div(class="form-group")
+                            label(for="name" class="col-lg-2 control-label") Name
+                            input(type="text" class="form-control input-sm" placeholder="Name" id="name" name="name")
+                        div(class="form-group")
+                            label(for="price" class="col-lg-2 control-label") Price
+                            input(type="text" class="form-control input-sm" placeholder="Price" id="price" name="price")
+                        div(class="form-group")
+                            label(for="description" class="col-lg-2 control-label") Description
+                            textarea(class="form-control" rows="3" placeholder="Description" id="description" name="description")
+                        div(class="form-group" align="center")
+                            button(type="reset" class="btn btn-default") Cancel
+                            button(type="submit" class="btn btn-primary") Submit
+        else
+            center
+                p Please sign in first.

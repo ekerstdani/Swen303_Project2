@@ -1,6 +1,7 @@
 extends layout
 
 block content
+
     nav(class="navbar navbar-default navbar-fixed-top")
         div(class="container-fluid")
             div(class="navbar-header")
@@ -37,15 +38,33 @@ block content
     br
     br
 
+
+
+
+    .container
+      .dropdown
+        button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown')
+          | Sort By
+          span.caret
+        ul.dropdown-menu
+          li
+            a(href="/browse?sortBy=lowestPrice") Lowest Price
+          li
+            a(href="/browse?sortBy=highestPrice") Highest Price
+          li
+            a(href="/browse?sortBy=name") Name 
+
+
     div(style="margin-left:30%; margin-right:30%;")
+
+
         table(class="table table-striped table-hover")
+
             thead
                 tr
-                    th(width="30%")
-                        a(href="/browse?orderBy=name") Name
+                    th(width="30%") Name
                     th(width="50%") Description
-                    th(width="20%")
-                        a(href="/browse?orderBy=price") Price
+                    th(width="20%") Price
                 tr
 
             tbody

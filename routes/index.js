@@ -34,9 +34,11 @@ router.get('/browse', function(req, res) {
 
     var query = "SELECT * FROM Stock ";
 
-    if(req.query.orderBy == "price")
-      query += "ORDER BY price;";
-    else if(req.query.orderBy == "name")
+    if(req.query.sortBy == "lowestPrice")
+      query += "ORDER BY price ASC;";
+    else if(req.query.sortBy == "highestPrice")
+      query += "ORDER BY price DESC;";
+    else if(req.query.sortBy == "name")
       query += "ORDER BY lower(label);";
     else
       query += ";";

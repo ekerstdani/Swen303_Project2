@@ -37,7 +37,7 @@ router.get('/browse', function(req, res) {
     if(req.query.orderBy == "price")
       query += "ORDER BY price;";
     else if(req.query.orderBy == "name")
-      query += "ORDER BY label;";
+      query += "ORDER BY lower(label);";
     else
       query += ";";
 

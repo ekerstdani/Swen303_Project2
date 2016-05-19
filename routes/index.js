@@ -63,9 +63,9 @@ router.get('/product', function(req, res) {
       console.error(err);
       return;
     }
-    
+
     var query = "SELECT * FROM stock WHERE sid=" + req.query.sid + ";";
-    
+
     client.query(query, function (error, result) {
       done();
       if (error) {
@@ -74,9 +74,55 @@ router.get('/product', function(req, res) {
         return;
       }
 
-      res.render('product', { title: websiteName, product: result.rows[0], signedInUser: signedInUser });
-    })
-  })
+      var product = result.rows[0];
+
+      if (product.quantity > 0)
+          res.render('product', { title: websiteName, signedInUser: signedInUser, product: result.rows[0], inStock: true });
+      else
+        res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false });
+    });
+  });
+});
+
+router.get('/sold', function(req, res) {
+
+  pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+
+    var query = "SELECT * FROM stock WHERE sid=" + req.query.sid + ";";
+
+    client.query(query, function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+
+      var product = result.rows[0];
+
+        if (product.quantity > 0){
+          var query = "UPDATE stock SET quantity=" + (product.quantity-1) + " WHERE sid=" + product.sid + ";";
+
+          client.query(query, function (error, result) {
+            done();
+            if (error) {
+              console.error('Failed to execute query.');
+              console.error(error);
+              return;
+            }
+            res.render('sold', { title: websiteName, signedInUser: signedInUser, product: product });
+          });
+        }
+        else{
+          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false });
+        }
+    });
+  });
 });
 
 router.get('/login', function(req, res) {

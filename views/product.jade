@@ -42,6 +42,13 @@ block content
     br
 
     div(class="well" style="margin-left:20%; margin-right:20%;")
+
+        if !inStock
+            div(class="alert alert-dismissible alert-danger" id="message")
+                button(type="button" class="close" onclick="hideMessage();") &times;
+                p(align="center") Item not in Stock
+
+
         div(class="pull-right")
             p (product image)
 
@@ -49,6 +56,9 @@ block content
 
         h2(class="text-info") !{product.price}
             &nbsp;
-            button(class="btn btn-primary btn-xs") Buy Now
+            if(inStock)
+                a(class="btn btn-primary btn-xs", href="/sold?sid=" + product.sid) Buy Now
+            else
+                a(class="btn btn-primary btn-xs", disabled="disabled") Not in Stock
 
         p !{product.description}

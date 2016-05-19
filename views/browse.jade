@@ -39,8 +39,6 @@ block content
     br
 
 
-
-
     .container
       .dropdown
         button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown')
@@ -62,14 +60,17 @@ block content
 
             thead
                 tr
-                    th(width="30%") Name
-                    th(width="50%") Description
-                    th(width="20%") Price
+                    th(width="20%")
+                    th(width="20%") Name
+                    th(width="45%") Description
+                    th(width="15%") Price
                 tr
 
             tbody
                 each val in list
                     tr
+                        th
+                            img(src="https://pbs.twimg.com/profile_images/431293187869519873/FpnWw4sU_400x400.jpeg" width="100%")
                         th
                             a(href="/product?sid=" + val.sid) !{val.label}
                         th !{val.description}

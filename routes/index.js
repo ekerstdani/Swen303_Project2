@@ -40,8 +40,10 @@ router.get('/browse', function(req, res) {
       query += "ORDER BY price DESC;";
     else if(req.query.sortBy == "name")
       query += "ORDER BY lower(label);";
+    else if (req.query.sortBy == "newestFirst")
+      query += "ORDER BY sid DESC;";
     else
-      query += ";";
+      query += ";"
 
     client.query(query, function (error, result) {
       done();
@@ -51,7 +53,9 @@ router.get('/browse', function(req, res) {
         return;
       }
 
-      res.render('browse', { title: websiteName, signedInUser: signedInUser, list: result.rows });
+      var placeholderImage = "https://pbs.twimg.com/profile_images/431293187869519873/FpnWw4sU_400x400.jpeg"
+
+      res.render('browse', { title: websiteName, signedInUser: signedInUser, list: result.rows, placeholderImage: placeholderImage});
     });
   });
 });
@@ -77,7 +81,7 @@ router.get('/product', function(req, res) {
       var product = result.rows[0];
 
       if (product.quantity > 0)
-          res.render('product', { title: websiteName, signedInUser: signedInUser, product: result.rows[0], inStock: true });
+          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true });
       else
         res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false });
     });

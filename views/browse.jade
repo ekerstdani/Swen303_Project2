@@ -45,12 +45,14 @@ block content
           | Sort By
           span.caret
         ul.dropdown-menu
-          li
-            a(href="/browse?sortBy=lowestPrice") Lowest Price
-          li
-            a(href="/browse?sortBy=highestPrice") Highest Price
-          li
-            a(href="/browse?sortBy=name") Name 
+            li
+                a(href="/browse?sortBy=lowestPrice") Lowest Price
+            li
+                a(href="/browse?sortBy=highestPrice") Highest Price
+            li
+                a(href="/browse?sortBy=name") Name
+            li
+                a(href="/browse?sortBy=newestFirst") Newest First
 
 
     div(style="margin-left:20%; margin-right:20%;")
@@ -67,9 +69,10 @@ block content
 
             tbody
                 each val in list
-                    tr.clickable-row(href="/product?sid=" + val.sid)
+                    tr
                         th
-                            img(src="https://pbs.twimg.com/profile_images/431293187869519873/FpnWw4sU_400x400.jpeg" width="100%")
+                            a(href="/product?sid=" + val.sid)
+                                img(src=placeholderImage, width="100%")
                         th
                             a(href="/product?sid=" + val.sid) !{val.label}
                         th !{val.description}

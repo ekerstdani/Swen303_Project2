@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-var pg = require('pg').native;
+var pg = require('pg');
 
-var database = "postgres://depot:5432/swen303g8";
+var database = "postgres://postgres:admin@localhost:5432/swen303";
 pg.connect(database, function (err) {
   if (err) {
     console.error('Could not connect to the database.');
@@ -316,6 +316,29 @@ router.get('/search', function(req, res) {
   res.render('search', { title: websiteName, message: "" });
 });
 
+router.get('/profile', function(req, res) {
+  pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
 
+    client.query("SELECT * FROM Users;", function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+
+      for (var i = 0; i < result.rows.length; i++) {
+        if (result.rows[i].uid == req.query.user) {
+          res.render('profile', { title: websiteName, signedInUser: signedInUser, user: result.rows[i] });
+        }
+      }
+    });
+  });
+});
 
 module.exports = router;

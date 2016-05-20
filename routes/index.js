@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-var pg = require('pg');
+var pg = require('pg').native;
 
-var database = "postgres://postgres:admin@localhost:5432/swen303";
+var database = "postgres://depot:5432/swen303g8";
 pg.connect(database, function (err) {
   if (err) {
     console.error('Could not connect to the database.');
@@ -68,7 +68,7 @@ router.get('/product', function(req, res) {
       return;
     }
 
-    var query = "SELECT * FROM stock WHERE uid=" + req.query.uid + ";";
+    var query = "SELECT * FROM stock WHERE sid=" + req.query.sid + ";";
 
     client.query(query, function (error, result) {
       done();
@@ -97,7 +97,7 @@ router.get('/sold', function(req, res) {
       return;
     }
 
-    var query = "SELECT * FROM stock WHERE uid=" + req.query.uid + ";";
+    var query = "SELECT * FROM stock WHERE sid=" + req.query.sid + ";";
 
     client.query(query, function (error, result) {
       done();
@@ -110,7 +110,7 @@ router.get('/sold', function(req, res) {
       var product = result.rows[0];
 
         if (product.quantity > 0){
-          var query = "UPDATE stock SET quantity=" + (product.quantity-1) + " WHERE uid=" + product.uid + ";";
+          var query = "UPDATE stock SET quantity=" + (product.quantity-1) + " WHERE sid=" + product.sid + ";";
 
           client.query(query, function (error, result) {
             done();
@@ -215,7 +215,7 @@ router.get('/doAddItem', function(req, res) {
       return;
     }
     
-    var query = "INSERT INTO Stock (sid, Label, Price, Quantity, Description, Image) VALUES (" +
+    var query = "INSERT INTO Stock (sid, Label, Price, Quantity, Description, url) VALUES (" +
         signedInUserUID + ", '" +
         req.query.name + "', " +
         req.query.price + ", " +

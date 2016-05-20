@@ -68,7 +68,7 @@ router.get('/product', function(req, res) {
       return;
     }
 
-    var query = "SELECT * FROM stock WHERE sid=" + req.query.sid + ";";
+    var query = "SELECT * FROM stock WHERE uid=" + req.query.uid + ";";
 
     client.query(query, function (error, result) {
       done();
@@ -97,7 +97,7 @@ router.get('/sold', function(req, res) {
       return;
     }
 
-    var query = "SELECT * FROM stock WHERE sid=" + req.query.sid + ";";
+    var query = "SELECT * FROM stock WHERE uid=" + req.query.uid + ";";
 
     client.query(query, function (error, result) {
       done();
@@ -110,7 +110,7 @@ router.get('/sold', function(req, res) {
       var product = result.rows[0];
 
         if (product.quantity > 0){
-          var query = "UPDATE stock SET quantity=" + (product.quantity-1) + " WHERE sid=" + product.sid + ";";
+          var query = "UPDATE stock SET quantity=" + (product.quantity-1) + " WHERE uid=" + product.uid + ";";
 
           client.query(query, function (error, result) {
             done();
@@ -215,7 +215,13 @@ router.get('/doAddItem', function(req, res) {
       return;
     }
     
-    var query = "INSERT INTO Stock (uid, Label, Price, Quantity, Description) VALUES (" + signedInUserUID + ", '" + req.query.name + "', " + req.query.price + ", " + req.query.quantity + ", '" + req.query.description + "');";
+    var query = "INSERT INTO Stock (uid, Label, Price, Quantity, Description, Image) VALUES (" +
+        signedInUserUID + ", '" +
+        req.query.name + "', " +
+        req.query.price + ", " +
+        req.query.quantity + ", '" +
+        req.query.description + "', '" +
+        req.query.imageURL + "');";
 
     client.query(query, function (error, result) {
       done();

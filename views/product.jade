@@ -59,7 +59,7 @@ block content
         h2(class="text-info") !{product.price}
             &nbsp;
             if(inStock)
-                a(class="btn btn-primary btn-xs", href="/sold?sid=" + product.sid) Buy Now
+                a(class="btn btn-primary btn-xs", href="/sold?uid=" + product.uid) Buy Now
             else
                 a(class="btn btn-primary btn-xs", disabled="disabled") Not in Stock
 

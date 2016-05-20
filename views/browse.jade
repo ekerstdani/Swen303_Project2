@@ -73,9 +73,9 @@ block content
                 each val in list
                     tr
                         th
-                            a(href="/product?sid=" + val.sid)
+                            a(href="/product?uid=" + val.sid)
                                 img(src=placeholderImage, width="100%")
                         th
-                            a(href="/product?sid=" + val.sid) !{val.label}
+                            a(href="/product?uid=" + val.sid) !{val.label}
                         th !{val.description}
                         th $!{val.price}

@@ -215,7 +215,7 @@ router.get('/doAddItem', function(req, res) {
       return;
     }
     
-    var query = "INSERT INTO Stock (uid, Label, Price, Quantity, Description, Image) VALUES (" +
+    var query = "INSERT INTO Stock (sid, Label, Price, Quantity, Description, Image) VALUES (" +
         signedInUserUID + ", '" +
         req.query.name + "', " +
         req.query.price + ", " +
@@ -323,6 +323,7 @@ router.get('/search', function(req, res) {
 });
 
 router.get('/profile', function(req, res) {
+  var user;
   pg.connect(database, function (err, client, done) {
     if (err) {
       console.error('Could not connect to the database.');
@@ -340,9 +341,20 @@ router.get('/profile', function(req, res) {
 
       for (var i = 0; i < result.rows.length; i++) {
         if (result.rows[i].uid == req.query.user) {
-          res.render('profile', { title: websiteName, signedInUser: signedInUser, user: result.rows[i] });
+          user = result.rows[i];
         }
       }
+    });
+
+    client.query("SELECT * FROM Stock WHERE sid = " + user.uid + ";", function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+      
+      res.render('profile', { title: websiteName, signedInUser: signedInUser, user: user, list: result.rows, signedInUser: signedInUserUID });
     });
   });
 });

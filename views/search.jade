@@ -1,0 +1,65 @@
+extends layout
+
+block content
+  nav(class="navbar navbar-default navbar-fixed-top")
+    div(class="container-fluid")
+      div(class="navbar-header")
+        a(class="navbar-brand" href="/") !{title}
+
+      div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+        ul(class="nav navbar-nav")
+          li(class="active")
+            a(href="/") Home
+          li
+            a(href="/browse") Browse
+          li
+            a(href="/search") Search
+
+        ul(class="nav navbar-nav navbar-right")
+          if signedInUser
+            li
+              a(href="/userPage" class="btn-primary" onmouseover="showOptions()" onmouseout="hideOptions()") !{signedInUser} &#x25BC;
+              span(id="userOptions" style="display:none; position: absolute;" onmouseover="showOptions()" onmouseout="hideOptions()")
+                a(href="/profile?user=" + id class="btn btn-default btn-sm") View public profile
+                a(href="/logout" class="btn btn-default btn-sm") Logout
+              
+          else
+            li
+              a(href="/login") Sign In
+
+  script(type='text/javascript').
+    function hideMessage() {
+      document.getElementById("message").style.display = 'none';
+    }
+    
+    function showOptions() {
+      document.getElementById('userOptions').style.display = 'block';
+    };
+    
+    function hideOptions() {
+      document.getElementById('userOptions').style.display = 'none';
+    };
+
+  br
+  br
+  br
+
+  div(style="margin-left:20%; margin-right:20%;")
+    if message
+      div(class="alert alert-dismissible alert-success" id="message")
+        button(type="button" class="close" onclick="hideMessage();") &times;
+        p(align="center") !{message}
+
+  h1(align="center") !{title}
+  p(align="center") Introduction to the website.
+
+  br
+
+  div(class="row search")
+    div(class="col-sm-6 col-sm-offset-3")
+      form(role="form")
+        div(class="input-group")
+          input(type="text" class="form-control input-sm" placeholder="Search products...")
+          span(class="input-group-btn")
+            button(class="btn btn-primary btn-sm" type="submit")
+              span(class="glyphicon glyphicon-search" aria-hidden="true")

@@ -55,7 +55,7 @@ router.get('/browse', function(req, res) {
 
       var placeholderImage = "https://pbs.twimg.com/profile_images/431293187869519873/FpnWw4sU_400x400.jpeg"
 
-      res.render('browse', { title: websiteName, signedInUser: signedInUser, list: result.rows, placeholderImage: placeholderImage});
+      res.render('browse', { title: websiteName, signedInUser: signedInUser, list: result.rows, placeholderImage: placeholderImage, id: signedInUserUID });
     });
   });
 });

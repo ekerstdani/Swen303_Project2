@@ -1,0 +1,98 @@
+extends layout
+
+block content
+    nav(class="navbar navbar-default navbar-fixed-top")
+        div(class="container-fluid")
+            div(class="navbar-header")
+                a(class="navbar-brand" href="/") !{title}
+
+            div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+                ul(class="nav navbar-nav")
+                    li
+                        a(href="/") Home
+                    li
+                        a(href="/browse") Browse
+                    li
+                        a(href="/search") Search
+                    if(signedInUser)
+                        li
+                            a(href="/addItem") Sell
+                    else
+                        li
+                            a(href="/login?message=Please login first&redirect=/addItem") Sell
+
+                ul(class="nav navbar-nav navbar-right")
+                    if signedInUser
+                        li
+                          a(href="/userPage" class="btn-primary" onmouseover="showOptions()" onmouseout="hideOptions()") !{signedInUser} &#x25BC;
+                          span(id="userOptions" style="display:none; position: absolute;" onmouseover="showOptions()" onmouseout="hideOptions()")
+                            a(href="/profile?user=" + id class="btn btn-default btn-sm") View public profile
+                            a(href="/logout" class="btn btn-default btn-sm") Logout
+                    else
+                        li
+                            a(href="/login") Sign In
+
+    script(type='text/javascript').
+      function showOptions() {
+          document.getElementById('userOptions').style.display = 'block';
+        };
+    
+        function hideOptions() {
+          document.getElementById('userOptions').style.display = 'none';
+        };
+
+    br
+    br
+    br
+
+    h1(align="center") !{product.title}
+
+    br
+
+    div(class="well" style="margin-left:20%; margin-right:20%;")
+
+        if !inStock
+            div(class="alert alert-dismissible alert-danger" id="message")
+                button(type="button" class="close" onclick="hideMessage();") &times;
+                p(align="center") Item not in Stock
+
+
+        div(class="pull-right")
+            img(src= product.url, max-width='600px', height=auto)
+
+        h1 !{product.label}
+
+        h2(class="text-info") !{product.price}
+            &nbsp;
+        
+        p !{product.description}
+
+
+    div(class="well" style="margin-left:20%; margin-right:20%;")
+        div(class="row search")
+            div(class="col-sm-7 col-sm-offset-2")
+                form(role="form" action="/doEditItem")
+                    div(class="form-group")
+                        label(for="sid" class="col-lg-2 control-label") Sid
+                        input(type="number" readonly class="form-control input-sm" value=product.sid placeholder=product.sid product.label id="sid" name="sid")
+
+                    div(class="form-group")
+                        label(for="name" class="col-lg-2 control-label") Name
+                        input(type="text" class="form-control input-sm" value=product.label placeholder=product.label product.label id="name" name="name")
+                    div(class="form-group")
+                        label(for="price" class="col-lg-2 control-label") Price
+                        input(type="number" step="any" min="0" class="form-control input-sm" value=product.price placeholder=product.price id="price" name="price")
+                    div(class="form-group")
+                        label(for="price" class="col-lg-2 control-label") Quantity
+                        input(type="number" min="0" class="form-control input-sm" value=product.quantity placeholder=product.quantity id="quantity" name="quantity")
+                    div(class="form-group")
+                        label(for="description" class="col-lg-2 control-label") Description
+                        textarea(class="form-control" rows="3" placeholder=product.description id="description" name="description") !{product.description}
+                    div(class="form-group")
+                        label(for="imageURL" class="col-lg-2 control-label") Image URL
+                        input(type="text" class="form-control input-sm" value=product.url placeholder=product.url id="imageURL" name="imageURL")
+
+
+                    div(class="form-group" align="center")
+                        button(type="reset" class="btn btn-default") Cancel
+                        button(type="submit" class="btn btn-primary") Submit

@@ -180,29 +180,6 @@ router.get('/userPage', function(req, res) {
   res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "", id: signedInUserUID });
 });
 
-router.get('/profile', function(req, res) {
-  pg.connect(database, function (err, client, done) {
-    if (err) {
-      console.error('Could not connect to the database.');
-      console.error(err);
-      return;
-    }
-    
-    var query = "SELECT * FROM users WHERE uid=" + req.query.user + ";";
-    
-    client.query(query, function (error, result) {
-      done();
-      if (error) {
-        console.error('Failed to execute query.');
-        console.error(error);
-        return;
-      }
-      
-      res.render('profile', { title: websiteName, user: result.rows[0], signedInUser: signedInUser });
-   });
-  });
-});
-
 router.get('/addItem', function(req, res) {
   res.render('addItem', { title: websiteName, signedInUser: signedInUser });
 });
@@ -333,7 +310,6 @@ router.get('/search', function(req, res) {
 });
 
 router.get('/profile', function(req, res) {
-  var user;
   pg.connect(database, function (err, client, done) {
     if (err) {
       console.error('Could not connect to the database.');
@@ -341,7 +317,20 @@ router.get('/profile', function(req, res) {
       return;
     }
 
-    client.query("SELECT * FROM Users;", function (error, result) {
+    var query = "SELECT * FROM stock WHERE uid=" + signedInUserUID + " ";
+
+    if(req.query.sortBy == "lowestPrice")
+      query += "ORDER BY price ASC;";
+    else if(req.query.sortBy == "highestPrice")
+      query += "ORDER BY price DESC;";
+    else if(req.query.sortBy == "name")
+      query += "ORDER BY lower(label);";
+    else if (req.query.sortBy == "newestFirst")
+      query += "ORDER BY sid DESC;";
+    else
+      query += ";"
+
+    client.query(query , function (error, result) {
       done();
       if (error) {
         console.error('Failed to execute query.');
@@ -349,22 +338,114 @@ router.get('/profile', function(req, res) {
         return;
       }
 
-      for (var i = 0; i < result.rows.length; i++) {
-        if (result.rows[i].uid == req.query.user) {
-          user = result.rows[i];
-        }
-      }
+      res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows, signedInUserUID: signedInUserUID });
     });
+  });
+});
 
-    client.query("SELECT * FROM Stock WHERE sid = " + user.uid + ";", function (error, result) {
+router.get('/editItem', function(req, res) {
+  pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+
+    var query = "SELECT * FROM stock WHERE sid=" + req.query.sid + ";";
+
+    client.query(query, function (error, result) {
       done();
       if (error) {
         console.error('Failed to execute query.');
         console.error(error);
         return;
       }
-      
-      res.render('profile', { title: websiteName, signedInUser: signedInUser, user: user, list: result.rows, signedInUser: signedInUserUID });
+
+      var product = result.rows[0];
+
+      if (product.quantity > 0)
+          res.render('editItem', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true });
+      else
+        res.render('editItem', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false });
+    });
+  });
+});
+
+router.get('/doEditItem', function(req, res) {
+    pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+    
+    var query = "UPDATE stock SET " +
+        "uid = " + signedInUserUID + ", " +
+        "label = '" + req.query.name + "', " +
+        "price = " + req.query.price + ", " +
+        "quantity = " + req.query.quantity + ", " +
+        "description = '" + req.query.description + "', " +
+        "url = '" + req.query.imageURL + 
+        "' WHERE sid=" + req.query.sid + " " +
+        "RETURNING sid;";
+
+    client.query(query, function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+
+      client.query("SELECT * FROM stock WHERE sid=" + result.rows[0].sid, function (error, result) {
+        done();
+        if (error) {
+          console.error('Failed to execute query.');
+          console.error(error);
+          return;
+        }
+
+        client.query("SELECT * FROM stock WHERE uid=" + signedInUserUID + ";", function (error, result) {
+          done();
+          if (error) {
+            console.error('Failed to execute query.');
+            console.error(error);
+            return;
+          }
+
+          res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows });
+        });
+      });
+    });
+  });
+});
+
+router.get('/doDeleteItem', function(req, res) {
+  pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+
+    client.query("DELETE FROM stock WHERE sid=" + req.query.sid + ";", function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+
+      client.query("SELECT * FROM stock WHERE uid=" + signedInUserUID + ";", function (error, result) {
+        done();
+        if (error) {
+          console.error('Failed to execute query.');
+          console.error(error);
+          return;
+        }
+
+        res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows });
+      });
     });
   });
 });

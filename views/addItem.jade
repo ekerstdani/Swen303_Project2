@@ -1,3 +1,4 @@
+
 extends layout
 
 block content
@@ -14,6 +15,12 @@ block content
                         a(href="/browse") Browse
                     li
                         a(href="/search") Search
+                    if(signedInUser)
+                        li(class="active")
+                            a(href="/addItem") Sell
+                    else
+                        li
+                            a(href="/login?message=Please login first&redirect=/addItem") Sell
 
                 ul(class="nav navbar-nav navbar-right")
                     if signedInUser

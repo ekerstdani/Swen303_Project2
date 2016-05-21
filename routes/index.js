@@ -130,7 +130,7 @@ router.get('/sold', function(req, res) {
 });
 
 router.get('/login', function(req, res) {
-  res.render('login', { title: websiteName, message: "" });
+  res.render('login', { title: websiteName, message: req.query.message, redirect: req.query.redirect });
 });
 
 router.get('/doLogin', function(req, res) {
@@ -171,7 +171,7 @@ router.get('/doLogin', function(req, res) {
         }
       }
 
-      res.render('login', { title: websiteName, message: message });
+      res.render('login', { title: websiteName, message: message, redirect: req.query.redirect });
     });
   });
 });

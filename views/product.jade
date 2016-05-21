@@ -58,15 +58,17 @@ block content
                 button(type="button" class="close" onclick="hideMessage();") &times;
                 p(align="center") Item not in Stock
 
+        if product.url
+            div(class="pull-right")
+                img(src= product.url, max-width='600px', height=auto)
 
-        div(class="pull-right")
-            img(src= product.url, max-width='600px', height=auto)
-
-        h2(class="text-info") $!{product.price}
+        h2(class="text-info" style="margin-bottom:0px;") $!{product.price}
             &nbsp;
             if(inStock)
                 a(class="btn btn-primary btn-xs", href="/sold?sid=" + product.sid) Buy Now
             else
                 a(class="btn btn-primary btn-xs", disabled="disabled") Not in Stock
+
+        p(class="text-warning") !{product.quantity} in stock
 
         p !{product.description}

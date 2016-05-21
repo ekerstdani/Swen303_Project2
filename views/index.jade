@@ -17,9 +17,9 @@ block content
                             a(href="/addItem") Sell
                     else
                         li
-                            a(href="/login?message=Please login first&redirect=/addItem") Sell
+                            a(href="/login?message=Please login first.&redirect=/addItem") Sell
 
-        form(class="navbar-form navbar-left" role="search" submit="/search" style="margin-top:5px;")
+        form(class="navbar-form navbar-left" role="search" action="/search" style="margin-top:5px;")
           div(class="input-group")
             input(type="text" class="form-control input-sm" placeholder="Search products..." name="searchTerm" id="searchTerm")
             span(class="input-group-btn")
@@ -68,7 +68,7 @@ block content
 
   div(class="row search")
     div(class="col-sm-6 col-sm-offset-3")
-      form(role="form" submit="/search")
+      form(role="form" action="/search")
         div(class="input-group")
           input(type="text" class="form-control input-sm" placeholder="Search products..." name="searchTerm" id="searchTerm")
           span(class="input-group-btn")

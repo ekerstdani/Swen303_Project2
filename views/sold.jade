@@ -17,9 +17,9 @@ block content
                             a(href="/addItem") Sell
                     else
                         li
-                            a(href="/login?message=Please login first&redirect=/addItem") Sell
+                            a(href="/login?message=Please login first.&redirect=/addItem") Sell
 
-                form(class="navbar-form navbar-left" role="search" submit="/search" style="margin-top:5px;")
+                form(class="navbar-form navbar-left" role="search" action="/search" style="margin-top:5px;")
                     div(class="input-group")
                         input(type="text" class="form-control input-sm" placeholder="Search products..." name="searchTerm" id="searchTerm")
                         span(class="input-group-btn")
@@ -50,4 +50,6 @@ block content
     br
     br
 
-    h2 Congratulations! You've successfully purchased item: !{product.label}
+    center
+        h2 Congratulations!
+        h4(class="text-success") You purchased !{product.label}

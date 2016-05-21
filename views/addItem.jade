@@ -18,9 +18,9 @@ block content
                             a(href="/addItem") Sell
                     else
                         li
-                            a(href="/login?message=Please login first&redirect=/addItem") Sell
+                            a(href="/login?message=Please login first.&redirect=/addItem") Sell
 
-                form(class="navbar-form navbar-left" role="search" submit="/search" style="margin-top:5px;")
+                form(class="navbar-form navbar-left" role="search" action="/search" style="margin-top:5px;")
                     div(class="input-group")
                         input(type="text" class="form-control input-sm" placeholder="Search products..." name="searchTerm" id="searchTerm")
                         span(class="input-group-btn")
@@ -62,10 +62,10 @@ block content
                                 input(type="text" class="form-control input-sm" placeholder="Name" id="name" name="name")
                             div(class="form-group")
                                 label(for="price" class="col-lg-2 control-label") Price
-                                input(type="text" class="form-control input-sm" placeholder="Price" id="price" name="price")
+                                input(type="number" class="form-control input-sm" placeholder="Price" id="price" name="price")
                             div(class="form-group")
                                 label(for="price" class="col-lg-2 control-label") Quantity
-                                input(type="text" class="form-control input-sm" placeholder="Quantity" id="quantity" name="quantity")
+                                input(type="number" class="form-control input-sm" placeholder="Quantity" id="quantity" name="quantity")
                             div(class="form-group")
                                 label(for="description" class="col-lg-2 control-label") Description
                                 textarea(class="form-control" rows="3" placeholder="Description" id="description" name="description")

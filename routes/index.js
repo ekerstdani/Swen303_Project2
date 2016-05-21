@@ -81,9 +81,9 @@ router.get('/product', function(req, res) {
       var product = result.rows[0];
 
       if (product.quantity > 0)
-          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true });
+          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true, id: signedInUserUID });
       else
-        res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false });
+        res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID });
     });
   });
 });
@@ -119,18 +119,18 @@ router.get('/sold', function(req, res) {
               console.error(error);
               return;
             }
-            res.render('sold', { title: websiteName, signedInUser: signedInUser, product: product });
+            res.render('sold', { title: websiteName, signedInUser: signedInUser, product: product, id: signedInUserUID });
           });
         }
         else{
-          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false });
+          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID });
         }
     });
   });
 });
 
 router.get('/login', function(req, res) {
-  res.render('login', { title: websiteName, message: req.query.message, redirect: req.query.redirect });
+  res.render('login', { title: websiteName, message: req.query.message, redirect: req.query.redirect, id: signedInUserUID });
 });
 
 router.get('/doLogin', function(req, res) {
@@ -171,7 +171,7 @@ router.get('/doLogin', function(req, res) {
         }
       }
 
-      res.render('login', { title: websiteName, message: message, redirect: req.query.redirect });
+      res.render('login', { title: websiteName, message: message, redirect: req.query.redirect, id: signedInUserUID });
     });
   });
 });
@@ -181,7 +181,7 @@ router.get('/userPage', function(req, res) {
 });
 
 router.get('/addItem', function(req, res) {
-  res.render('addItem', { title: websiteName, signedInUser: signedInUser });
+  res.render('addItem', { title: websiteName, signedInUser: signedInUser, id: signedInUserUID });
 });
 
 router.get('/doAddItem', function(req, res) {
@@ -209,7 +209,7 @@ router.get('/doAddItem', function(req, res) {
         return;
       }
 
-      client.query("SELECT * FROM stock WHERE sid=" + result.rows[0].sid, function (error, result) {
+      client.query("SELECT * FROM stock WHERE sid=" + result.rows[0].sid + ";", function (error, result) {
         done();
         if (error) {
           console.error('Failed to execute query.');
@@ -225,14 +225,14 @@ router.get('/doAddItem', function(req, res) {
 
 router.get('/logout', function(req, res) {
   signedInUser = false;
-  res.render('index', { title: websiteName, signedInUser: signedInUser, message: "Signed out successfully." });
+  res.render('index', { title: websiteName, signedInUser: signedInUser, message: "Signed out successfully.", id: signedInUserUID });
 });
 
 router.get('/changePW', function(req, res) {
   var password = req.query.pw;
   
   if (password != req.query.pwConfirm) {
-    res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Passwords did not match." });
+    res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Passwords did not match.", id: signedInUserUID });
   }
   else {
   pg.connect(database, function (err, client, done) {
@@ -260,7 +260,7 @@ router.get('/changePW', function(req, res) {
               return;
             }
 
-            res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Successfully changed password." });
+            res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Successfully changed password.", id: signedInUserUID });
           });
         }
       }
@@ -297,7 +297,7 @@ router.get('/changeName', function(req, res) {
               return;
             }
 				signedInUserRealname = name;
-            res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Successfully changed name." });
+            res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Successfully changed name.", id: signedInUserUID });
           });
         }
       }
@@ -306,10 +306,6 @@ router.get('/changeName', function(req, res) {
 });
 
 router.get('/search', function(req, res) {
-  res.render('search', { title: websiteName, message: "" });
-});
-
-router.get('/profile', function(req, res) {
   pg.connect(database, function (err, client, done) {
     if (err) {
       console.error('Could not connect to the database.');
@@ -317,7 +313,7 @@ router.get('/profile', function(req, res) {
       return;
     }
 
-    var query = "SELECT * FROM stock WHERE uid=" + signedInUserUID + " ";
+    var query = "SELECT * FROM stock WHERE label LIKE '%' || '" + req.query.searchTerm + "' || '%' ";
 
     if(req.query.sortBy == "lowestPrice")
       query += "ORDER BY price ASC;";
@@ -338,7 +334,50 @@ router.get('/profile', function(req, res) {
         return;
       }
 
-      res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows, signedInUserUID: signedInUserUID });
+      res.render('search', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, st: req.query.searchTerm });
+    });
+  });
+});
+
+router.get('/profile', function(req, res) {
+  pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+
+    var query = "SELECT * FROM stock WHERE uid=" + req.query.user + " ";
+
+    if(req.query.sortBy == "lowestPrice")
+      query += "ORDER BY price ASC;";
+    else if(req.query.sortBy == "highestPrice")
+      query += "ORDER BY price DESC;";
+    else if(req.query.sortBy == "name")
+      query += "ORDER BY lower(label);";
+    else if (req.query.sortBy == "newestFirst")
+      query += "ORDER BY sid DESC;";
+    else
+      query += ";"
+
+    client.query(query , function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+
+      client.query("SELECT * FROM users WHERE uid=" + req.query.user + ";", function (error, result2) {
+        done();
+        if (error) {
+          console.error('Failed to execute query.');
+          console.error(error);
+          return;
+        }
+
+        res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, user: result2.rows[0] });
+      });
     });
   });
 });
@@ -364,9 +403,9 @@ router.get('/editItem', function(req, res) {
       var product = result.rows[0];
 
       if (product.quantity > 0)
-          res.render('editItem', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true });
+          res.render('editItem', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true, id: signedInUserUID });
       else
-        res.render('editItem', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false });
+        res.render('editItem', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID });
     });
   });
 });
@@ -413,7 +452,16 @@ router.get('/doEditItem', function(req, res) {
             return;
           }
 
-          res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows });
+          client.query("SELECT * FROM users WHERE uid=" + signedInUserUID + ";", function (error, result2) {
+            done();
+            if (error) {
+              console.error('Failed to execute query.');
+              console.error(error);
+              return;
+            }
+
+            res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, user: result2.rows[0] });
+          });
         });
       });
     });
@@ -444,7 +492,16 @@ router.get('/doDeleteItem', function(req, res) {
           return;
         }
 
-        res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows });
+        client.query("SELECT * FROM users WHERE uid=" + signedInUserUID + ";", function (error, result2) {
+          done();
+          if (error) {
+            console.error('Failed to execute query.');
+            console.error(error);
+            return;
+          }
+
+          res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, user: result2.rows[0] });
+        });
       });
     });
   });

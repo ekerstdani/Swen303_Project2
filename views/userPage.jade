@@ -21,6 +21,13 @@ block content
                         li
                             a(href="/login?message=Please login first&redirect=/addItem") Sell
 
+                form(class="navbar-form navbar-left" role="search" submit="/search" style="margin-top:5px;")
+                    div(class="input-group")
+                        input(type="text" class="form-control input-sm" placeholder="Search products..." name="searchTerm" id="searchTerm")
+                        span(class="input-group-btn")
+                            button(class="btn btn-primary btn-sm" type="submit")
+                                span(class="glyphicon glyphicon-search" aria-hidden="true")
+
                 ul(class="nav navbar-nav navbar-right")
                     if signedInUser
                         li

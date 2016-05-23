@@ -598,4 +598,45 @@ router.get('/plusOne', function(req, res) {
   }
 });
 
+router.get('/signUp', function(req, res) {
+  res.render('signUp', { title: websiteName, message: "" });
+});
+
+router.get('/doSignUp', function(req, res) {
+  if (req.query.password != req.query.confirmPassword) {
+    res.render('signUp', { title: websiteName, message: "Passwords don't match." });
+  }
+  else if (req.query.username == "" || req.query.realname == "") {
+    res.render('signUp', { title: websiteName, message: "Please full in all form entries." });
+  }
+  else {
+    pg.connect(database, function (err, client, done) {
+      if (err) {
+        console.error('Could not connect to the database.');
+        console.error(err);
+        return;
+      }
+
+      var query = "INSERT INTO users (username, realname, password, rep, money) VALUES ('";
+      query += req.query.username;
+      query += "', '";
+      query += req.query.realname;
+      query += "', '";
+      query += req.query.password;
+      query += "', 0, 0);";
+
+      client.query(query, function (error, result) {
+        done();
+        if (error) {
+          console.error('Failed to execute query.');
+          console.error(error);
+          return;
+        }
+
+        res.render('index', { title: websiteName, signedInUser: signedInUser, message: "", id: signedInUserUID, money: money });
+      });
+    });
+  }
+});
+
 module.exports = router;

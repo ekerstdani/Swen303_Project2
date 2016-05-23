@@ -27,33 +27,22 @@ block content
                                 span(class="glyphicon glyphicon-search" aria-hidden="true")
 
                 ul(class="nav navbar-nav navbar-right")
-                    if signedInUser
-                        li
-                            a(href="/profile?user=" + id class="btn-default") Credit:
-                                &nbsp;
-                                span(class="text-info") $!{money}
-
-                        li
-                            a(href="/userPage" class="btn-primary") !{signedInUser}
-                        li
-                            a(href="/logout") Logout
-                    else
-                        li
-                            a(href="/login") Sign In
-                        li
-                            a(href="/signUp") Sign Up
+                    li
+                        a(href="/login") Sign In
+                    li
+                        a(href="/signUp") Sign Up
 
     script(type='text/javascript').
         function hideMessage() {
             document.getElementById("message").style.display = 'none';
         }
-        
+
         function showOptions() {
-          document.getElementById('userOptions').style.display = 'block';
+            document.getElementById('userOptions').style.display = 'block';
         };
-    
+
         function hideOptions() {
-          document.getElementById('userOptions').style.display = 'none';
+            document.getElementById('userOptions').style.display = 'none';
         };
 
     br
@@ -68,13 +57,19 @@ block content
 
         div(class="row search")
             div(class="col-sm-7 col-sm-offset-2")
-                form(role="form" action="/doLogin")
+                form(role="form" action="/doSignUp")
                     div(class="form-group")
                         label(for="username" class="col-lg-2 control-label") Username
                         input(type="text" class="form-control input-sm" placeholder="Username" id="username" name="username")
                     div(class="form-group")
+                        label(for="username" class="col-lg-2 control-label") Real Name
+                        input(type="text" class="form-control input-sm" placeholder="Real Name" id="realname" name="realname")
+                    div(class="form-group")
                         label(for="password" class="col-lg-2 control-label") Password
                         input(type="password" class="form-control input-sm" placeholder="Password" id="password" name="password")
+                    div(class="form-group")
+                        label(for="confirmPassword" class="col-lg-2 control-label") Confirm Password
+                        input(type="password" class="form-control input-sm" placeholder="Confirm Password" id="confirmPassword" name="confirmPassword")
                     div(class="form-group" align="center")
-                            button(type="reset" class="btn btn-default") Cancel
-                            button(type="submit" class="btn btn-primary") Sign In
+                        button(type="reset" class="btn btn-default") Cancel
+                        button(type="submit" class="btn btn-primary") Sign Up

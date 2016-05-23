@@ -24,7 +24,7 @@ var money = 0.0;
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index', { title: websiteName, signedInUser: signedInUser, message: "", id: signedInUserUID, money: money });
+  res.render('index', { title: websiteName, signedInUser: signedInUser, message: "", id: signedInUserUID, money: parseInt(money) });
 });
 
 router.get('/browse', function(req, res) {
@@ -64,7 +64,7 @@ router.get('/browse', function(req, res) {
 
       var placeholderImage = "https://pbs.twimg.com/profile_images/431293187869519873/FpnWw4sU_400x400.jpeg"
 
-      res.render('browse', { title: websiteName, signedInUser: signedInUser, list: result.rows, placeholderImage: placeholderImage, id: signedInUserUID, money: money });
+      res.render('browse', { title: websiteName, signedInUser: signedInUser, list: result.rows, placeholderImage: placeholderImage, id: signedInUserUID, money: parseInt(money) });
     });
   });
 });
@@ -98,9 +98,9 @@ router.get('/product', function(req, res) {
         }
 
         if (product.quantity > 0)
-            res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true, id: signedInUserUID, listedBy: result.rows[0], money: money});
+            res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true, id: signedInUserUID, listedBy: result.rows[0], money: parseInt(money)});
         else
-          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID, listedBy: result.rows[0], money: money});
+          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID, listedBy: result.rows[0], money: parseInt(money)});
       });
     });
   });
@@ -149,19 +149,19 @@ router.get('/sold', function(req, res) {
               }
 
               money = money - product.price;
-              res.render('sold', { title: websiteName, signedInUser: signedInUser, product: product, id: signedInUserUID, money: money });
+              res.render('sold', { title: websiteName, signedInUser: signedInUser, product: product, id: signedInUserUID, money: parseInt(money) });
             });
           });
         }
         else{
-          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID, money: money });
+          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID, money: parseInt(money) });
         }
     });
   });
 });
 
 router.get('/login', function(req, res) {
-  res.render('login', { title: websiteName, message: req.query.message, redirect: req.query.redirect, id: signedInUserUID, money: money });
+  res.render('login', { title: websiteName, message: req.query.message, redirect: req.query.redirect, id: signedInUserUID, money: parseInt(money) });
 });
 
 router.get('/doLogin', function(req, res) {
@@ -195,7 +195,7 @@ router.get('/doLogin', function(req, res) {
             signedInUserUID = result.rows[i].uid;
             money = result.rows[i].money;
             
-            res.render('index', { title: websiteName, message: message, signedInUser: signedInUser, id: signedInUserUID, money: money });
+            res.render('index', { title: websiteName, message: message, signedInUser: signedInUser, id: signedInUserUID, money: parseInt(money) });
           }
           else {
             message = "Incorrect password.";
@@ -203,13 +203,13 @@ router.get('/doLogin', function(req, res) {
         }
       }
 
-      res.render('login', { title: websiteName, message: message, redirect: req.query.redirect, id: signedInUserUID, money: money });
+      res.render('login', { title: websiteName, message: message, redirect: req.query.redirect, id: signedInUserUID, money: parseInt(money) });
     });
   });
 });
 
 router.get('/userPage', function(req, res) {
-  res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "", id: signedInUserUID, money: money });
+  res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "", id: signedInUserUID, money: parseInt(money) });
 });
 
 router.get('/addItem', function(req, res) {
@@ -249,7 +249,7 @@ router.get('/doAddItem', function(req, res) {
           return;
         }
 
-        res.render('product', { title: websiteName, signedInUser: signedInUser, product: result.rows[0], inStock: true, money: money, listedBy: signedInUserUID });
+        res.render('product', { title: websiteName, signedInUser: signedInUser, product: result.rows[0], inStock: true, money: parseInt(money), listedBy: signedInUserUID });
 
       });
     });
@@ -258,14 +258,14 @@ router.get('/doAddItem', function(req, res) {
 
 router.get('/logout', function(req, res) {
   signedInUser = false;
-  res.render('index', { title: websiteName, signedInUser: signedInUser, message: "Signed out successfully.", id: signedInUserUID, money: money });
+  res.render('index', { title: websiteName, signedInUser: signedInUser, message: "Signed out successfully.", id: signedInUserUID, money: parseInt(money) });
 });
 
 router.get('/changePW', function(req, res) {
   var password = req.query.pw;
   
   if (password != req.query.pwConfirm) {
-    res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Passwords did not match.", id: signedInUserUID, money: money });
+    res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Passwords did not match.", id: signedInUserUID, money: parseInt(money) });
   }
   else {
   pg.connect(database, function (err, client, done) {
@@ -293,7 +293,7 @@ router.get('/changePW', function(req, res) {
               return;
             }
 
-            res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Successfully changed password.", id: signedInUserUID });
+            res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Successfully changed password.", id: signedInUserUID, money: parseInt(money) });
           });
         }
       }
@@ -330,7 +330,7 @@ router.get('/changeName', function(req, res) {
               return;
             }
 				signedInUserRealname = name;
-            res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Successfully changed name.", id: signedInUserUI, money: moneyD });
+            res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Successfully changed name.", id: signedInUserUI, money: parseInt(money) });
           });
         }
       }
@@ -367,7 +367,7 @@ router.get('/search', function(req, res) {
         return;
       }
 
-      res.render('search', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, st: req.query.searchTerm, money: money });
+      res.render('search', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, st: req.query.searchTerm, money: parseInt(money) });
     });
   });
 });
@@ -409,7 +409,7 @@ router.get('/profile', function(req, res) {
           return;
         }
 
-        res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, user: result2.rows[0], money: money });
+        res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, user: result2.rows[0], money: parseInt(money) });
       });
     });
   });
@@ -436,9 +436,9 @@ router.get('/editItem', function(req, res) {
       var product = result.rows[0];
 
       if (product.quantity > 0)
-          res.render('editItem', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true, id: signedInUserUID, money: money });
+          res.render('editItem', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true, id: signedInUserUID, money: parseInt(money) });
       else
-        res.render('editItem', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID, money: money });
+        res.render('editItem', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID, money: parseInt(money) });
     });
   });
 });
@@ -493,7 +493,7 @@ router.get('/doEditItem', function(req, res) {
               return;
             }
 
-            res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, user: result2.rows[0], money: money });
+            res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, user: result2.rows[0], money: parseInt(money) });
           });
         });
       });
@@ -533,7 +533,7 @@ router.get('/doDeleteItem', function(req, res) {
             return;
           }
 
-          res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, user: result2.rows[0], money: money });
+          res.render('profile', {title: websiteName, signedInUser: signedInUser, list: result.rows, id: signedInUserUID, user: result2.rows[0], money: parseInt(money) });
         });
       });
     });
@@ -557,14 +557,14 @@ router.get('/deposit', function(req, res) {
         return;
       }
 
-      res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Deposited money successfully.", id: signedInUserUID, money: money });
+      res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Deposited money successfully.", id: signedInUserUID, money: parseInt(money) });
     });
   });
 });
 
 router.get('/plusOne', function(req, res) {
   if (signedInUserUID == req.query.user) {
-    res.render('index', { title: websiteName, signedInUser: signedInUser, message: "Cannot +1 yourself", id: signedInUserUID, money: money });
+    res.render('index', { title: websiteName, signedInUser: signedInUser, message: "Cannot +1 yourself", id: signedInUserUID, money: parseInt(money) });
   }
   else {
     pg.connect(database, function (err, client, done) {
@@ -640,7 +640,7 @@ router.get('/doSignUp', function(req, res) {
           return;
         }
 
-        res.render('index', { title: websiteName, signedInUser: signedInUser, message: "", id: signedInUserUID, money: money });
+        res.render('index', { title: websiteName, signedInUser: signedInUser, message: "", id: signedInUserUID, money: parseInt(money) });
       });
     });
   }

@@ -96,11 +96,13 @@ router.get('/product', function(req, res) {
           console.error(error);
           return;
         }
-
-        if (product.quantity > 0)
-            res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true, id: signedInUserUID, listedBy: result.rows[0], money: parseInt(money)});
+        if (product.price<=money)
+          if (product.quantity > 0) 
+            res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true, id: signedInUserUID, listedBy: result.rows[0], money: parseInt(money), hasMoney: true});
+          else
+            res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID, listedBy: result.rows[0], money: parseInt(money), hasMoney: true});
         else
-          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID, listedBy: result.rows[0], money: parseInt(money)});
+          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true, id: signedInUserUID, listedBy: result.rows[0], money: parseInt(money),hasMoney: false});
       });
     });
   });

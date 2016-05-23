@@ -243,7 +243,7 @@ router.get('/doAddItem', function(req, res) {
           return;
         }
 
-        res.render('product', { title: websiteName, signedInUser: signedInUser, product: result.rows[0], inStock: true });
+        res.render('product', { title: websiteName, signedInUser: signedInUser, product: result.rows[0], inStock: true, listedBy: signedInUserUID });
       });
     });
   });

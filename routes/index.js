@@ -45,6 +45,12 @@ router.get('/browse', function(req, res) {
       query += "ORDER BY lower(label);";
     else if (req.query.sortBy == "newestFirst")
       query += "ORDER BY sid DESC;";
+    else if (req.query.sortBy == "username")
+      query += "ORDER BY uid ASC;";
+    else if (req.query.sortBy == "lowestQuantity")
+      query += "ORDER BY quantity ASC;";
+    else if (req.query.sortBy == "highestQuantity")
+      query += "ORDER BY quantity DESC;";
     else
       query += ";"
 
@@ -243,7 +249,8 @@ router.get('/doAddItem', function(req, res) {
           return;
         }
 
-        res.render('product', { title: websiteName, signedInUser: signedInUser, product: result.rows[0], inStock: true, money: money });
+        res.render('product', { title: websiteName, signedInUser: signedInUser, product: result.rows[0], inStock: true, money: money, listedBy: signedInUserUID });
+
       });
     });
   });

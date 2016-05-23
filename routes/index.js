@@ -16,7 +16,7 @@ pg.connect(database, function (err) {
   console.log('Connected to database.');
 });
 
-var websiteName = 'Website Name';
+var websiteName = 'uBuy(WeGetRich)';
 var signedInUser = '';
 var signedInUserRealname = '';
 var signedInUserUID = 0;
@@ -213,7 +213,7 @@ router.get('/userPage', function(req, res) {
 });
 
 router.get('/addItem', function(req, res) {
-  res.render('addItem', { title: websiteName, signedInUser: signedInUser, id: signedInUserUID, money: money });
+  res.render('addItem', { title: websiteName, signedInUser: signedInUser, id: signedInUserUID, money: parseInt(money) });
 });
 
 router.get('/doAddItem', function(req, res) {
@@ -597,7 +597,7 @@ router.get('/plusOne', function(req, res) {
             signedInUser: signedInUser,
             message: "+1'd Seller",
             id: signedInUserUID,
-            money: money
+            money: parseInt(money)
           });
         });
       });

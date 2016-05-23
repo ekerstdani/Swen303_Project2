@@ -51,6 +51,10 @@ router.get('/browse', function(req, res) {
       query += "ORDER BY quantity ASC;";
     else if (req.query.sortBy == "highestQuantity")
       query += "ORDER BY quantity DESC;";
+    else if (req.query.priceMin)
+      query += ("AND price >= " + req.query.priceMin)
+     if (req.query.priceMax)
+        query += ("AND price < " + req.query.priceMax)
     else
       query += ";"
 

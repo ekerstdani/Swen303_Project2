@@ -80,10 +80,19 @@ router.get('/product', function(req, res) {
 
       var product = result.rows[0];
 
-      if (product.quantity > 0)
-          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true, id: signedInUserUID });
-      else
-        res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID });
+      client.query("SELECT * FROM users WHERE uid=" + product.uid + ";" , function (error, result) {
+        done();
+        if (error) {
+          console.error('Failed to execute query.');
+          console.error(error);
+          return;
+        }
+
+        if (product.quantity > 0)
+            res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: true, id: signedInUserUID, listedBy: result.rows[0]});
+        else
+          res.render('product', { title: websiteName, signedInUser: signedInUser, product: product, inStock: false, id: signedInUserUID, listedBy: result.rows[0]});
+      });
     });
   });
 });

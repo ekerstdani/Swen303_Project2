@@ -57,21 +57,26 @@ block content
             h1= user.username
             h4(class="text-info") Reputation: !{user.rep}
 
-        h3 Items I'm Selling
-            .dropdown
-                button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown')
-                    | Sort By
-                    &nbsp;
-                    span.caret
-                ul.dropdown-menu
-                    li
-                        a(href="/profile?sortBy=lowestPrice") Lowest Price
-                    li
-                        a(href="/profile?sortBy=highestPrice") Highest Price
-                    li
-                        a(href="/profile?sortBy=name") Name
-                    li
-                        a(href="/profile?sortBy=newestFirst") Newest First
+        if user.uid == id
+            h3 Items I'm Selling
+        else
+            h3 Items !{user.username}'s Selling
+
+            // sorting not working, can't get db query to work for some reason
+            // .dropdown
+            //     button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown')
+            //         | Sort By
+            //         &nbsp;
+            //         span.caret
+            //     ul.dropdown-menu
+            //         li
+            //             a(href="/profile?sortBy=lowestPrice") Lowest Price
+            //         li
+            //             a(href="/profile?sortBy=highestPrice") Highest Price
+            //         li
+            //             a(href="/profile?sortBy=name") Name
+            //         li
+            //             a(href="/profile?sortBy=newestFirst") Newest First
 
         table(class="table table-striped table-hover")
 

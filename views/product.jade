@@ -72,3 +72,6 @@ block content
         p(class="text-warning") !{product.quantity} in stock
 
         p !{product.description}
+
+        p
+            a(href="/profile?user=" + listedBy.uid  ) Listed by !{listedBy.username}

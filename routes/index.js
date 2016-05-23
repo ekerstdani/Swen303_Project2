@@ -20,7 +20,7 @@ var websiteName = 'Website Name';
 var signedInUser = '';
 var signedInUserRealname = '';
 var signedInUserUID = 0;
-var money = 0;
+var money = 0.0;
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -534,7 +534,7 @@ router.get('/doDeleteItem', function(req, res) {
 });
 
 router.get('/deposit', function(req, res) {
-  money = parseInt(money, 10) +  parseInt(req.query.amount, 10);
+  money = parseFloat(money, 10) +  parseFloat(req.query.amount, 10);
   pg.connect(database, function (err, client, done) {
     if (err) {
       console.error('Could not connect to the database.');
@@ -553,6 +553,49 @@ router.get('/deposit', function(req, res) {
       res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Deposited money successfully.", id: signedInUserUID, money: money });
     });
   });
+});
+
+router.get('/plusOne', function(req, res) {
+  if (signedInUserUID == req.query.user) {
+    res.render('index', { title: websiteName, signedInUser: signedInUser, message: "Cannot +1 yourself", id: signedInUserUID, money: money });
+  }
+  else {
+    pg.connect(database, function (err, client, done) {
+      if (err) {
+        console.error('Could not connect to the database.');
+        console.error(err);
+        return;
+      }
+
+      client.query("SELECT * FROM users WHERE uid=" + req.query.user + ";", function (error, result) {
+        done();
+        if (error) {
+          console.error('Failed to execute query.');
+          console.error(error);
+          return;
+        }
+
+        var rep = parseInt(result.rows[0].rep);
+
+        client.query("UPDATE users SET rep=" + (rep + 1) + " WHERE uid=" + req.query.user + ";", function (error, result) {
+          done();
+          if (error) {
+            console.error('Failed to execute query.');
+            console.error(error);
+            return;
+          }
+
+          res.render('index', {
+            title: websiteName,
+            signedInUser: signedInUser,
+            message: "+1'd Seller",
+            id: signedInUserUID,
+            money: money
+          });
+        });
+      });
+    });
+  }
 });
 
 module.exports = router;

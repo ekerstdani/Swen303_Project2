@@ -62,9 +62,14 @@ block content
 
   div(style="margin-left:20%; margin-right:20%;")
     if message
-      div(class="alert alert-dismissible alert-success" id="message")
-        button(type="button" class="close" onclick="hideMessage();") &times;
-        p(align="center") !{message}
+      if message == "Cannot +1 yourself"
+        div(class="alert alert-dismissible alert-danger" id="message")
+          button(type="button" class="close" onclick="hideMessage();") &times;
+          p(align="center") !{message}
+      else
+        div(class="alert alert-dismissible alert-success" id="message")
+          button(type="button" class="close" onclick="hideMessage();") &times;
+          p(align="center") !{message}
 
   h1(align="center") !{title}
   p(align="center") Introduction to the website.

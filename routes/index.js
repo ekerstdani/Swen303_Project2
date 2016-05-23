@@ -32,7 +32,7 @@ router.get('/browse', function(req, res) {
       return;
     }
 
-    var query = "SELECT * FROM Stock ";
+    var query = "SELECT * FROM Stock WHERE quantity > 0 ";
 
     if(req.query.sortBy == "lowestPrice")
       query += "ORDER BY price ASC;";

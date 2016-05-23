@@ -82,7 +82,12 @@ block content
     div(style="margin-left:20%; margin-right:20%;")
         center
             if signedInUser
-                p Hello, !{realname}.
+                p Hello, !{realname}. You currently have
+                    &nbsp;
+                    span(class="text-success")
+                        $!{money}
+                    &nbsp;
+                    in credit.
             
                 a(class="btn btn-primary" href="/profile?user=" + id style="margin-bottom:4px; margin-right:5px;") View public profile
                 a(class="btn btn-primary" href="/addItem" style="margin-bottom:4px;") Add new item

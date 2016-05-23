@@ -144,9 +144,9 @@ block content
                 div(class="col-sm-6 col-sm-offset-3")
                     form(role="form" action="/deposit")
                         div(class="input-group")
-                            input(type="text" class="form-control input-sm" name="amount" placeholder="Amount in dollars")
-                            input(type="text" class="form-control input-sm" name="cc" placeholder="CC Number")
+                            input(type="number" min="10" class="form-control input-sm" name="amount" placeholder="Amount in dollars (Min. $10)")
+                            input(type="number" min="-9999999999999999" max="9999999999999999" class="form-control input-sm" name="cc" placeholder="CC Number")
                             input(type="text" class="form-control input-sm" name="name" placeholder="Name on card")
-                            input(type="text" class="form-control input-sm" name="security" placeholder="Security number")
+                            input(type="number" min="-999" max="999" class="form-control input-sm" name="security" placeholder="Security number")
                             input(type="text" class="form-control input-sm" name="expiry" placeholder="Expiry date (dd/mm)")
                             button(class="btn btn-primary btn-sm" type="submit") Deposit money

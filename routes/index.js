@@ -533,4 +533,26 @@ router.get('/doDeleteItem', function(req, res) {
   });
 });
 
+router.get('/deposit', function(req, res) {
+  money = parseInt(money, 10) +  parseInt(req.query.amount, 10);
+  pg.connect(database, function (err, client, done) {
+    if (err) {
+      console.error('Could not connect to the database.');
+      console.error(err);
+      return;
+    }
+
+    client.query("UPDATE users SET money=" + money + " WHERE uid=" + signedInUserUID + ";", function (error, result) {
+      done();
+      if (error) {
+        console.error('Failed to execute query.');
+        console.error(error);
+        return;
+      }
+
+      res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "Deposited money successfully.", id: signedInUserUID, money: money });
+    });
+  });
+});
+
 module.exports = router;

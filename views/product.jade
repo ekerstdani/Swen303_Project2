@@ -72,7 +72,9 @@ block content
         h2(class="text-info" style="margin-bottom:0px;") $!{product.price}
             &nbsp;
             if(inStock)
-                if(signedInUser)
+                if (listedBy.uid == id)
+                     a(class="btn btn-primary btn-xs", href="/editItem?sid=" + product.sid) Edit
+                else if(signedInUser)
                     a(class="btn btn-primary btn-xs", href="/sold?sid=" + product.sid) Buy Now
                 else
                     a(class="btn btn-primary btn-xs", href="/login?message=Please sign in first.") Buy Now

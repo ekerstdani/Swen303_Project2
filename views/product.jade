@@ -73,7 +73,11 @@ block content
         h2(class="text-info" style="margin-bottom:0px;") $!{product.price}
             &nbsp;
             if(inStock)
-                a(class="btn btn-primary btn-xs", href="/sold?sid=" + product.sid) Buy Now
+                if(signedInUser)
+                    a(class="btn btn-primary btn-xs", href="/sold?sid=" + product.sid) Buy Now
+                else
+                    a(class="btn btn-primary btn-xs", href="/login?message=Please sign in first.") Buy Now
+
             else
                 a(class="btn btn-primary btn-xs", disabled="disabled") Not in Stock
 

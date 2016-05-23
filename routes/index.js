@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
+//var pg = require('pg');
 var pg = require('pg').native;
 
+//var database = "postgres://postgres:admin@localhost:5432/swen303";
 var database = "postgres://depot:5432/swen303g8";
 pg.connect(database, function (err) {
   if (err) {
@@ -18,6 +20,7 @@ var websiteName = 'Website Name';
 var signedInUser = '';
 var signedInUserRealname = '';
 var signedInUserUID = 0;
+var money = 0;
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -119,7 +122,20 @@ router.get('/sold', function(req, res) {
               console.error(error);
               return;
             }
-            res.render('sold', { title: websiteName, signedInUser: signedInUser, product: product, id: signedInUserUID });
+
+            var query = "UPDATE users SET money=" + (money - product.price) + " WHERE uid=" + signedInUserUID + ";";
+
+            client.query(query, function (error, result) {
+              done();
+              if (error) {
+                console.error('Failed to execute query.');
+                console.error(error);
+                return;
+              }
+
+              money = money - product.price;
+              res.render('sold', { title: websiteName, signedInUser: signedInUser, product: product, id: signedInUserUID });
+            });
           });
         }
         else{
@@ -162,6 +178,7 @@ router.get('/doLogin', function(req, res) {
             signedInUser = username;
             signedInUserRealname = result.rows[i].realname;
             signedInUserUID = result.rows[i].uid;
+            money = result.rows[i].money;
             
             res.render('index', { title: websiteName, message: message, signedInUser: signedInUser, id: signedInUserUID });
           }
@@ -177,7 +194,7 @@ router.get('/doLogin', function(req, res) {
 });
 
 router.get('/userPage', function(req, res) {
-  res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "", id: signedInUserUID });
+  res.render('userPage', { title: websiteName, signedInUser: signedInUser, realname: signedInUserRealname, message: "", id: signedInUserUID, money: money });
 });
 
 router.get('/addItem', function(req, res) {

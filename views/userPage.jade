@@ -29,6 +29,11 @@ block content
                 ul(class="nav navbar-nav navbar-right")
                     if signedInUser
                         li
+                            a(href="/profile?user=" + id class="btn-default") Credit:
+                                &nbsp;
+                                span(class="text-info") $!{money}
+
+                        li
                           a(href="/userPage" class="btn-primary" onmouseover="showOptions()" onmouseout="hideOptions()") !{signedInUser} &#x25BC;
                           span(id="userOptions" style="display:none; position: absolute;" onmouseover="showOptions()" onmouseout="hideOptions()")
                             a(href="/profile?user=" + id class="btn btn-default btn-sm") View public profile
@@ -40,16 +45,32 @@ block content
     script(type='text/javascript').
         function showChangePW() {
             document.getElementById('changeName').style.display = 'none';
+            document.getElementById('addMoney').style.display = 'none';
+
             document.getElementById('changePW').style.display = 'block';
+            document.getElementById('addMoneyButton').className = "btn btn-info btn-xs";
             document.getElementById('changeNameButton').className = "btn btn-info btn-xs";
             document.getElementById('changePWButton').className = "btn btn-info btn-xs disabled";
         }
         
         function showChangeName() {
             document.getElementById('changePW').style.display = 'none';
+            document.getElementById('addMoney').style.display = 'none';
+
             document.getElementById('changeName').style.display = 'block';
             document.getElementById('changePWButton').className = "btn btn-info btn-xs";
+            document.getElementById('addMoneyButton').className = "btn btn-info btn-xs";
             document.getElementById('changeNameButton').className = "btn btn-info btn-xs disabled";
+        }
+
+        function showAddMoney() {
+            document.getElementById('changePW').style.display = 'none';
+            document.getElementById('changeName').style.display = 'none';
+
+            document.getElementById('addMoney').style.display = 'block';
+            document.getElementById('changePWButton').className = "btn btn-info btn-xs";
+            document.getElementById('changeNameButton').className = "btn btn-info btn-xs";
+            document.getElementById('addMoneyButton').className = "btn btn-info btn-xs disabled";
         }
         
         function hideMessage() {
@@ -70,7 +91,7 @@ block content
     
     div(style="margin-left:20%; margin-right:20%;")
       if message
-        if message == "Successfully changed password." || message == "Successfully changed name."
+        if message == "Successfully changed password." || message == "Successfully changed name." || message == "Deposited money successfully."
           div(class="alert alert-dismissible alert-success" id="message")
             button(type="button" class="close" onclick="hideMessage();") &times;
             p(align="center") !{message}
@@ -93,7 +114,8 @@ block content
                 a(class="btn btn-primary" href="/addItem" style="margin-bottom:4px;") Add new item
                 br
                 a(class="btn btn-info btn-xs" onclick="showChangePW()" id="changePWButton" style="margin-right:5px;") Change password
-                a(class="btn btn-info btn-xs" onclick="showChangeName()" id="changeNameButton") Change name
+                a(class="btn btn-info btn-xs" onclick="showChangeName()" id="changeNameButton" style="margin-right:5px;") Change name
+                a(class="btn btn-info btn-xs" onclick="showAddMoney()" id="addMoneyButton") Deposit money
             else
                 p Please sign in first.
                 
@@ -114,3 +136,14 @@ block content
                     div(class="input-group")
                       input(type="text" class="form-control input-sm" name="name" placeholder="New name")
                       button(class="btn btn-primary btn-sm" type="submit") Change name
+
+            div(id="addMoney" class="well" style="display:none; height:220px;")
+                div(class="col-sm-6 col-sm-offset-3")
+                    form(role="form" action="/deposit")
+                        div(class="input-group")
+                            input(type="text" class="form-control input-sm" name="amount" placeholder="Amount in dollars")
+                            input(type="text" class="form-control input-sm" name="cc" placeholder="CC Number")
+                            input(type="text" class="form-control input-sm" name="name" placeholder="Name on card")
+                            input(type="text" class="form-control input-sm" name="security" placeholder="Security number")
+                            input(type="text" class="form-control input-sm" name="expiry" placeholder="Expiry date (dd/mm)")
+                            button(class="btn btn-primary btn-sm" type="submit") Deposit money

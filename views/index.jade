@@ -29,6 +29,11 @@ block content
         ul(class="nav navbar-nav navbar-right")
           if signedInUser
             li
+              a(href="/profile?user=" + id class="btn-default") Credit:
+                &nbsp;
+                span(class="text-info") $!{money}
+
+            li
               a(href="/userPage" class="btn-primary" onmouseover="showOptions()" onmouseout="hideOptions()") !{signedInUser} &#x25BC;
               span(id="userOptions" style="display:none; position: absolute;" onmouseover="showOptions()" onmouseout="hideOptions()")
                 a(href="/profile?user=" + id class="btn btn-default btn-sm") View public profile
@@ -57,9 +62,14 @@ block content
 
   div(style="margin-left:20%; margin-right:20%;")
     if message
-      div(class="alert alert-dismissible alert-success" id="message")
-        button(type="button" class="close" onclick="hideMessage();") &times;
-        p(align="center") !{message}
+      if message == "Cannot +1 yourself"
+        div(class="alert alert-dismissible alert-danger" id="message")
+          button(type="button" class="close" onclick="hideMessage();") &times;
+          p(align="center") !{message}
+      else
+        div(class="alert alert-dismissible alert-success" id="message")
+          button(type="button" class="close" onclick="hideMessage();") &times;
+          p(align="center") !{message}
 
   h1(align="center") !{title}
   p(align="center") Introduction to the website.

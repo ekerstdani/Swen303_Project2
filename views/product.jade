@@ -72,16 +72,16 @@ block content
 
         h2(class="text-info" style="margin-bottom:0px;") $!{product.price}
             &nbsp;
-            if(inStock && hasMoney)
+            if(inStock)
                 if (listedBy.uid == id)
                      a(class="btn btn-primary btn-xs", href="/editItem?sid=" + product.sid) Edit
                 else if(signedInUser)
-                    a(class="btn btn-primary btn-xs", href="/sold?sid=" + product.sid) Buy Now
+                    if (money >= product.price)
+                        a(class="btn btn-primary btn-xs", href="/sold?sid=" + product.sid) Buy Now
+                    else
+                        a(class="btn btn-primary btn-xs", href="/userPage") Add Credit
                 else
                     a(class="btn btn-primary btn-xs", href="/login?message=Please sign in first.") Buy Now
-
-            else if(hasMoney==false)
-                a(class="btn btn-primary btn-xs", disabled="disabled") Not Enough Money
             else
                 a(class="btn btn-primary btn-xs", disabled="disabled") Not in Stock
 
